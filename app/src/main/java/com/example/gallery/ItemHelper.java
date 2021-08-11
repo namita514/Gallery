@@ -48,6 +48,12 @@ public class ItemHelper {
         this.listener = listener;
         fetchImage(String.format(squareImageURL,x));
     }
+    void fetchImageFromGallery(String url,Context context,OnCompleteListener listener){
+        this.context = context;
+
+        this.listener = listener;
+        fetchImage(url);
+    }
 
     //imageFetcher--------------------------------------------------------------
     void fetchImage(String Url){
@@ -60,7 +66,7 @@ public class ItemHelper {
             @Override
             public void onLoadCleared(@Nullable  Drawable placeholder) {
              super.onLoadFailed(placeholder);
-             listener.onError("image not found");
+//             listener.onError("image not found");
             }
         });
     }
@@ -89,7 +95,7 @@ public class ItemHelper {
                        for(ImageLabel label:labels){
                           strings.add(label.getText());
                        }
-listener.onFetched(bitmap,colors,strings);}
+                   listener.onFetched(bitmap,colors,strings);}
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override

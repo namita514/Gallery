@@ -8,4 +8,12 @@
        app:showAsAction="always">
 
     </item>
+    <item
+        android:title="Add_Image"
+        android:id="@+id/add_from_gallery"
+        android:icon="@drawable/photo_gallery"
+        app:showAsAction="always">
+
+    </item>
+
 </menu>

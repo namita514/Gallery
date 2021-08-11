@@ -34,7 +34,7 @@ public class addImageDialog {
    private AlertDialog dialog;
 
 
-    void show(Context context,OnCompleteListener listener){
+    addImageDialog show(Context context,OnCompleteListener listener){
         this.context=context;
         this.listener = listener;
 
@@ -47,7 +47,7 @@ public class addImageDialog {
         else{
             dialog.dismiss();
             listener.onError("Cast Exception");
-            return;
+            return this;
         }
 
         //Create & show dialog
@@ -56,6 +56,7 @@ public class addImageDialog {
         handleDimensionsInput();
         hideErrorsForEditText();
 
+    return this;
     }
     //utils
 
@@ -173,6 +174,26 @@ public class addImageDialog {
 
     }
 
+    // for image from gallery
+    public void addImageFromGallery(String url){
+        dialog.hide();
+        new ItemHelper().fetchImageFromGallery(url, context, new ItemHelper.OnCompleteListener() {
+            @Override
+            public void onFetched(Bitmap image, Set<Integer> colors, List<String> label) {
+                b.inputDimensionsRoot.setVisibility(View.GONE);
+                dialog.show();
+
+                b.mainRoot.setVisibility(View.VISIBLE);
+                showData(image,colors,label);
+            }
+
+            @Override
+            public void onError(String error) {
+                dialog.dismiss();
+                listener.onError(error);
+            }
+        });
+    }
     // step 3:show data
 
     private void showData(Bitmap image, Set<Integer> colors, List<String> label) {
