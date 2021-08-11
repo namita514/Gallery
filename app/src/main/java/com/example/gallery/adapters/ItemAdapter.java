@@ -1,10 +1,14 @@
 package com.example.gallery.adapters;
 
 import android.content.Context;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gallery.databinding.ItemCardBinding;
@@ -18,6 +22,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
 
     private Context context;
     private List<ItemModel> items;
+    private ItemTouchHelper itemTouchHelper;
 
     public ItemAdapter(Context context, List<ItemModel> items){
 
@@ -32,6 +37,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
 
         // Create and return ViewHolder
         return new ViewHolder(cardBinding);
+
     }
 
     @Override
@@ -48,29 +54,72 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
     }
 
     @Override
-    public boolean onItemMove(int fromPosition, int toPosition) {
-        if (fromPosition < toPosition) {
-            for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(items, i, i + 1);
-            }
-        } else {
-            for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(items, i, i - 1);
-            }
-        }
+    public void onItemMove(int fromPosition, int toPosition) {
+        ItemModel formItem = items.get(fromPosition);
+        items.remove(formItem);
+        items.add(toPosition, formItem);
+
         notifyItemMoved(fromPosition, toPosition);
-        return true;
+
+    }
+    public void setItemTouchHelper(ItemTouchHelper itemTouchHelper){
+        this.itemTouchHelper=itemTouchHelper;
     }
     @Override
     public int getItemCount() {
         return items.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements
+            View.OnTouchListener,
+            GestureDetector.OnGestureListener
+    {
+        GestureDetector gestureDetector;
         ItemCardBinding cardBinding;
+        private ItemTouchHelper itemTouchHelper;
+
         public ViewHolder( ItemCardBinding cardBinding) {
             super(cardBinding.getRoot());
             this.cardBinding = cardBinding;
+            gestureDetector=new GestureDetector(cardBinding.getRoot().getContext(),this);
+            cardBinding.getRoot().setOnTouchListener(this);
+        }
+
+        @Override
+
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            gestureDetector.onTouchEvent(motionEvent);
+            return true;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent motionEvent) {
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent motionEvent) {
+
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent motionEvent) {
+            return false;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+            return false;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent motionEvent) {
+            itemTouchHelper.startDrag(this);
+        }
+
+        @Override
+        public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+            return true;
         }
     }
 

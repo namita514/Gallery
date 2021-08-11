@@ -68,24 +68,10 @@ private final List<ItemModel> cardItem=new ArrayList<>();
           b.cardItem.setAdapter(adapter);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(b.cardItem);
-    }
 
-    @Override
-    public int getMovementFlags(RecyclerView recyclerView,
-                                RecyclerView.ViewHolder viewHolder) {
-        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-        int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
-        return makeMovementFlags(dragFlags, swipeFlags);
-    }
-    @Override
-    public boolean isLongPressDragEnabled() {
-        return true;
-    }
-    @Override
-    public boolean isItemViewSwipeEnabled() {
-        return true;
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        adapter.setItemTouchHelper(mItemTouchHelper);
+        mItemTouchHelper.attachToRecyclerView(b.cardItem);
     }
 
 
