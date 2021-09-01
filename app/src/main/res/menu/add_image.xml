@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:myapp="http://schemas.android.com/tools">
 
     <item android:title="Add_Image"
         android:id="@+id/add_image"
@@ -15,5 +16,27 @@
         app:showAsAction="always">
 
     </item>
+    <item
+        android:title="drag_and_drop"
+        android:id="@+id/drag_and_drop"
+        android:icon="@drawable/ic_baseline_drag_handle_24"
+        app:showAsAction="always">
+
+    </item>
+    <item
+        android:title="sort_data"
+        android:id="@+id/sort"
+        android:icon="@drawable/ic_baseline_sort_by_alpha_24"
+        app:showAsAction="always">
+
+    </item>
+    <item
+        android:title="search"
+        android:id="@+id/search"
+        android:icon="@drawable/ic_baseline_search_24"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always|collapseActionView">
+
+</item>
 
 </menu>

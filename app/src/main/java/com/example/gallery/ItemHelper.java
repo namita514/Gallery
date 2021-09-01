@@ -123,4 +123,10 @@ listener.onError(e.toString());     }
         void onFetched(Bitmap image, Set<Integer> colors, List<String> label);
         void onError(String error);
     }
+    public void editImage(Bitmap bitmap ,Context context,OnCompleteListener listener){
+        this.bitmap=bitmap;
+        this.context=context;
+        this.listener=listener;
+        extractPaletteColorFromBitmap(bitmap);
+    }
 }

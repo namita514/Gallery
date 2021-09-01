@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.gallery.databinding.ChipLabelBinding;
 import com.example.gallery.databinding.ColorChipBinding;
 import com.example.gallery.databinding.DialogAddImageBinding;
+import com.example.gallery.models.ItemModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -234,7 +235,7 @@ public class addImageDialog {
                 int color=((Chip)b.colorChips.findViewById(colorChipId)).getChipBackgroundColor().getDefaultColor();
 
                 //send callbacks
-                listener.onImageAdded(image,color,label);
+                listener.onImageAdded(new ItemModel(image,color,label));
                 dialog.dismiss();
             }
         });
@@ -278,7 +279,7 @@ public class addImageDialog {
     }
 
     interface OnCompleteListener{
-        void onImageAdded(Bitmap image, int color,String label);
+        void onImageAdded(ItemModel item);
         void onError(String error);
     }
 }

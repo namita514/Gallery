@@ -46,4 +46,9 @@ dependencies {
     // Use this dependency to bundle the model with your app
     implementation 'com.google.mlkit:image-labeling:17.0.5'
 
+   
+        implementation 'com.google.code.gson:gson:2.8.8'
+
+
+
 }
