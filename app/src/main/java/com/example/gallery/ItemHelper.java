@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.palette.graphics.Palette;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.common.util.Strings;
@@ -42,12 +43,13 @@ public class ItemHelper {
         fetchImage(String.format(rectangularImageURL,x,y));
     }
     // for Square image
-  void fetchData(int x,Context context,OnCompleteListener listener){
+    void fetchData(int x,Context context,OnCompleteListener listener){
         this.context = context;
 
         this.listener = listener;
         fetchImage(String.format(squareImageURL,x));
     }
+
     void fetchImageFromGallery(String url,Context context,OnCompleteListener listener){
         this.context = context;
 
@@ -57,7 +59,7 @@ public class ItemHelper {
 
     //imageFetcher--------------------------------------------------------------
     void fetchImage(String Url){
-        Glide.with(context).asBitmap().load(Url).into(new CustomTarget<Bitmap>() {
+        Glide.with(context).asBitmap().load(Url).diskCacheStrategy(DiskCacheStrategy.NONE).into(new CustomTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull  Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 extractPaletteColorFromBitmap(resource);
@@ -123,6 +125,8 @@ listener.onError(e.toString());     }
         void onFetched(Bitmap image, Set<Integer> colors, List<String> label);
         void onError(String error);
     }
+
+    // to get the color and label option for editable image
     public void editImage(Bitmap bitmap ,Context context,OnCompleteListener listener){
         this.bitmap=bitmap;
         this.context=context;

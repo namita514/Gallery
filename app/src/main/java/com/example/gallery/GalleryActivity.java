@@ -1,64 +1,39 @@
 package com.example.gallery;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuItemCompat;
-import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.gallery.adapters.ItemAdapter;
 import com.example.gallery.databinding.ActivityMainBinding;
-import com.example.gallery.databinding.ChipLabelBinding;
-import com.example.gallery.databinding.ColorChipBinding;
-import com.example.gallery.databinding.DialogAddImageBinding;
-import com.example.gallery.databinding.ItemCardBinding;
 import com.example.gallery.helpers.SimpleItemTouchHelperCallback;
 import com.example.gallery.models.ItemModel;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.google.mlkit.vision.common.InputImage;
-import com.google.mlkit.vision.label.ImageLabel;
-import com.google.mlkit.vision.label.ImageLabeler;
-import com.google.mlkit.vision.label.ImageLabeling;
-import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
 
-import java.io.FileNotFoundException;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import static androidx.recyclerview.widget.ItemTouchHelper.Callback.makeMovementFlags;
-
-public class MainActivity extends AppCompatActivity {
+public class GalleryActivity extends AppCompatActivity {
 ActivityMainBinding b;
 private List<ItemModel> cardItem=new ArrayList<>();
     SharedPreferences preferences;
@@ -77,7 +52,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
         b = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
         preferences=getSharedPreferences("shared preferences",MODE_PRIVATE);
-        loadSharedPreferences();
+//        loadSharedPreferences();
 
     }
 
@@ -129,7 +104,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch(item.getItemId()){
-            case R.id.add_image:
+            case R.id.add_image_from_internet:
                 showAddImageDialog();
             case R.id.add_from_gallery:
                 addFromGallery();
@@ -151,7 +126,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
         if (mode == 0) {
             mode = 1;
             adapter.mode = 1;
-            Toast.makeText(MainActivity.this, "Drag and Drop enable", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GalleryActivity.this, "Drag and Drop enable", Toast.LENGTH_SHORT).show();
             List<ItemAdapter.ViewHolder> holders = adapter.holders;
             for (int i = 0; i < holders.size(); i++) {
                 holders.get(i).setUpListener();
@@ -171,7 +146,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
         if (mode == 1) {
 
             adapter.mode = 1;
-            Toast.makeText(MainActivity.this, "Drag and Drop enable", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GalleryActivity.this, "Drag and Drop enable", Toast.LENGTH_SHORT).show();
             List<ItemAdapter.ViewHolder> holders = adapter.holders;
             for (int i = 0; i < holders.size(); i++) {
                 holders.get(i).setUpListener();
@@ -194,7 +169,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
                 bitmap=adapter.images;
                 int index=adapter.index;
                   editImage(bitmap,index);
-                Toast.makeText(MainActivity.this,"edit picture",Toast.LENGTH_SHORT).show();
+                Toast.makeText(GalleryActivity.this,"edit picture",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.share_image:
                 shareImage();
@@ -204,7 +179,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
         }
 
     }
-
+//to edit the image--------------------
     private void editImage(Bitmap bitmap,int index) {
 
         new EditImageDialog().show(this, bitmap, new EditImageDialog.OnCompleteListener() {
@@ -278,10 +253,11 @@ private List<ItemModel> cardItem=new ArrayList<>();
         if (resultCode == RESULT_OK && requestCode==0){
             Uri targetUri = data.getData();
              String uri=targetUri.toString();
-          new addImageDialog().show(this, new addImageDialog.OnCompleteListener() {
+          new AddImageDialog().show(this, new AddImageDialog.OnCompleteListener() {
               @Override
               public void onImageAdded(ItemModel item) {
                   cardItem.add(item) ;
+                  b.zeroItem.setVisibility(View.GONE);
                   setUpRecyclerView();
 //                  b.zeroItem.setVisibility(View.GONE);
 
@@ -289,7 +265,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
 
               @Override
               public void onError(String error) {
-                  Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
+                  Toast.makeText(GalleryActivity.this, error, Toast.LENGTH_SHORT).show();
 
               }
           }).addImageFromGallery(uri);
@@ -299,7 +275,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
      // dialog to add image
 
     private void showAddImageDialog() {
-        new addImageDialog().show(this, new addImageDialog.OnCompleteListener() {
+        new AddImageDialog().show(this, new AddImageDialog.OnCompleteListener() {
             @Override
             public void onImageAdded(ItemModel item) {
                b.zeroItem.setVisibility(View.GONE);
@@ -309,7 +285,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
 
             @Override
             public void onError(String error) {
-                 new MaterialAlertDialogBuilder(MainActivity.this)
+                 new MaterialAlertDialogBuilder(GalleryActivity.this)
                          .setTitle("Error")
                          .setMessage(error)
                          .show();

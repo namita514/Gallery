@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.hardware.biometrics.BiometricManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -25,7 +24,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.List;
 import java.util.Set;
 
-public class addImageDialog {
+public class AddImageDialog {
     private Context context;
     private OnCompleteListener listener;
     private LayoutInflater inflater;
@@ -33,15 +32,15 @@ public class addImageDialog {
     private boolean isCustomLabel;
     private Bitmap image;
    private AlertDialog dialog;
+   private ItemModel item;
 
-
-    addImageDialog show(Context context,OnCompleteListener listener){
+    AddImageDialog show(Context context, OnCompleteListener listener){
         this.context=context;
         this.listener = listener;
 
         //inflate dialogs layout
-        if(context instanceof  MainActivity){
-            inflater=((MainActivity) context).getLayoutInflater();
+        if(context instanceof GalleryActivity){
+            inflater=((GalleryActivity) context).getLayoutInflater();
        b=DialogAddImageBinding.inflate(inflater);
 
         }
@@ -274,7 +273,9 @@ public class addImageDialog {
             ColorChipBinding binding=ColorChipBinding.inflate(inflater);
             binding.getRoot().setChipBackgroundColor(ColorStateList.valueOf(Color));
             b.colorChips.addView(binding.getRoot());
-
+            if (item != null && item.color == Color) {
+                binding.getRoot().setChecked(true);
+            }
         }
     }
 

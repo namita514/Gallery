@@ -1,35 +1,22 @@
 package com.example.gallery;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.palette.graphics.Palette;
 
 import com.example.gallery.databinding.ChipLabelBinding;
 import com.example.gallery.databinding.ColorChipBinding;
-import com.example.gallery.databinding.DialogAddImageBinding;
 import com.example.gallery.databinding.DialogEditImageBinding;
 import com.example.gallery.models.ItemModel;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.mlkit.vision.common.InputImage;
-import com.google.mlkit.vision.label.ImageLabel;
-import com.google.mlkit.vision.label.ImageLabeler;
-import com.google.mlkit.vision.label.ImageLabeling;
-import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -50,8 +37,8 @@ public class EditImageDialog {
         this.bitmap=bitmap;
 
         //inflate dialogs layout
-        if(context instanceof  MainActivity){
-            inflater=((MainActivity) context).getLayoutInflater();
+        if(context instanceof GalleryActivity){
+            inflater=((GalleryActivity) context).getLayoutInflater();
            b= DialogEditImageBinding.inflate(inflater);
 
         }
@@ -66,6 +53,8 @@ public class EditImageDialog {
         dialog= new MaterialAlertDialogBuilder(context).setView(b.getRoot()).show();
         return this;
     }
+
+
     public void editItem(){
         dialog.hide();
         new ItemHelper().editImage(bitmap, context, new ItemHelper.OnCompleteListener() {
@@ -81,7 +70,7 @@ public class EditImageDialog {
             }
         });
     }
-
+     // to show the data on dialog box-------------------
     private void showData(Bitmap image, Set<Integer> colors, List<String> label) {
        b.imageView.setImageBitmap(image);
         inflateColorChips(colors);
@@ -90,6 +79,7 @@ public class EditImageDialog {
         handleAddImageEvent();
         b.customLabelInput.setVisibility(View.GONE);
     }
+
 
     private void handleAddImageEvent() {
         b.addBtn.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +111,8 @@ public class EditImageDialog {
             }
         });
     }
+
+     //to handle custom input------------------------------
 
     private void handleCustomLabelInput() {
         ChipLabelBinding binding=ChipLabelBinding.inflate(inflater);

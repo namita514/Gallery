@@ -43,9 +43,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
         this.items = items;
         visibleItems=items;
     }
+
     public void setItemTouchHelper(ItemTouchHelper itemTouchHelper){
        mItemTouchHelper=itemTouchHelper;
     }
+
     @Override
     public ViewHolder onCreateViewHolder(@NonNull  ViewGroup parent, int viewType) {
         //Inflate Layout and return viewholder
@@ -78,10 +80,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        ItemModel formItem = items.get(fromPosition);
-        items.remove(formItem);
-        items.add(toPosition, formItem);
-        visibleItems=items;
+        Collections.swap(items, items.indexOf(visibleItems.get(fromPosition)), items.indexOf(visibleItems.get(toPosition)));
+        Collections.swap(visibleItems, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
 return true;
     }
@@ -172,6 +172,8 @@ return true;
         }
 
     }
+
+    // to sort the data item of recycler view-----------------------------------------------------
     public void sortData(){
         Collections.sort(items, new Comparator<ItemModel>() {
             @Override
@@ -183,6 +185,8 @@ return true;
         visibleItems=items;
         notifyDataSetChanged();
     }
+
+    //to search the item of recycler view
     public void searchData(String query){
         if(query==null){
             visibleItems=items;

@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:myapp="http://schemas.android.com/tools">
 
-    <item android:title="Add_Image"
-        android:id="@+id/add_image"
+    <item android:title="add_image_from_internet"
+        android:id="@+id/add_image_from_internet"
         android:icon="@drawable/add_photo"
        app:showAsAction="always">
 
     </item>
     <item
-        android:title="Add_Image"
+        android:title="add_from_gallery"
         android:id="@+id/add_from_gallery"
         android:icon="@drawable/photo_gallery"
         app:showAsAction="always">

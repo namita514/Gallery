@@ -9,24 +9,30 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/card_item"
+        android:id="@+id/cardItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/zeroItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="300dp"
-            android:gravity="center"
-            android:text="No item selected"
-            android:visibility="gone"/>
+    <TextView
+        android:id="@+id/zeroItem"
+        android:layout_width="152dp"
+        android:layout_height="62dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="356dp"
+        android:gravity="center"
+        android:text="No item selected"
+        android:textSize="16sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.458"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
