@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.gallery.helpers.RedirectedUrlHelper;
 import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +34,7 @@ public class ItemHelper {
             ,squareImageURL="https://picsum.photos/%d";
     private Bitmap bitmap;
     private Set<Integer> colors;
+    private String url1;
 
     //Triggers---------------------------------------------------------------
 
@@ -59,18 +61,25 @@ public class ItemHelper {
 
     //imageFetcher--------------------------------------------------------------
     void fetchImage(String Url){
-        Glide.with(context).asBitmap().load(Url).diskCacheStrategy(DiskCacheStrategy.NONE).into(new CustomTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(@NonNull  Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                extractPaletteColorFromBitmap(resource);
-            }
+         new RedirectedUrlHelper().fetchRedirectedUrl(new RedirectedUrlHelper.OnCompleteListener() {
+             @Override
+             public void onFetched(String redirectedUrl) {
+                 url1=redirectedUrl;
+                 Glide.with(context).asBitmap().load(url1).diskCacheStrategy(DiskCacheStrategy.NONE).into(new CustomTarget<Bitmap>() {
+                     @Override
+                     public void onResourceReady(@NonNull  Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                         extractPaletteColorFromBitmap(resource);
+                     }
 
-            @Override
-            public void onLoadCleared(@Nullable  Drawable placeholder) {
-             super.onLoadFailed(placeholder);
+                     @Override
+                     public void onLoadCleared(@Nullable  Drawable placeholder) {
+                         super.onLoadFailed(placeholder);
 //             listener.onError("image not found");
-            }
-        });
+                     }
+                 });
+             }
+         }).execute(Url);
+
     }
 // paletteHelper---------------------------------------------------------
     private void extractPaletteColorFromBitmap(Bitmap bitmap) {
@@ -97,7 +106,7 @@ public class ItemHelper {
                        for(ImageLabel label:labels){
                           strings.add(label.getText());
                        }
-                   listener.onFetched(bitmap,colors,strings);}
+                   listener.onFetched(bitmap,url1,colors,strings);}
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -122,7 +131,7 @@ listener.onError(e.toString());     }
     }
 // listener--------------------------------------
     interface OnCompleteListener{
-        void onFetched(Bitmap image, Set<Integer> colors, List<String> label);
+        void onFetched( Bitmap image,String url, Set<Integer> colors, List<String> label);
         void onError(String error);
     }
 

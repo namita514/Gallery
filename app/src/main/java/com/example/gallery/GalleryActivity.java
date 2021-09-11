@@ -21,7 +21,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.gallery.adapters.ItemAdapter;
-import com.example.gallery.databinding.ActivityMainBinding;
+import com.example.gallery.databinding.ActivityGalleryBinding;
 import com.example.gallery.helpers.SimpleItemTouchHelperCallback;
 import com.example.gallery.models.ItemModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryActivity extends AppCompatActivity {
-ActivityMainBinding b;
+ActivityGalleryBinding b;
 private List<ItemModel> cardItem=new ArrayList<>();
     SharedPreferences preferences;
     ItemAdapter adapter;
@@ -49,17 +49,17 @@ private List<ItemModel> cardItem=new ArrayList<>();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setting up view binding
-        b = ActivityMainBinding.inflate(getLayoutInflater());
+        b = ActivityGalleryBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
         preferences=getSharedPreferences("shared preferences",MODE_PRIVATE);
-//        loadSharedPreferences();
+        if(cardItem==null) {
+            b.zeroItem.setVisibility(View.VISIBLE);
+        }
+
+      loadSharedPreferences();
+
 
     }
-
-
-
-
-    //
     //binding adapter to recycler view
     private void setUpRecyclerView() {
          adapter=new ItemAdapter(this,cardItem);
@@ -73,6 +73,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
         itemTouchHelper1.attachToRecyclerView(b.cardItem);
         restoreEnableDragAndDrop();
         b.cardItem.setAdapter(adapter);
+
     }
 
     // to create option menu
@@ -324,9 +325,11 @@ private List<ItemModel> cardItem=new ArrayList<>();
         Type type=new TypeToken<ArrayList<ItemModel>>(){
         }.getType();
         cardItem=gson.fromJson(json,type);
+
         if(cardItem==null){
             cardItem=new ArrayList<>();
         }
+        b.zeroItem.setVisibility(View.GONE);
         setUpRecyclerView();
 
 

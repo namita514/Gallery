@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.gallery.R;
 import com.example.gallery.databinding.DialogAddImageBinding;
 import com.example.gallery.databinding.ItemCardBinding;
@@ -62,7 +63,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
     public void onBindViewHolder(@NonNull  ItemAdapter.ViewHolder holder, int position) {
         holders.add(holder);
         ItemModel itemModel=visibleItems.get(position);
-       holder.cardBinding.imageView.setImageBitmap(itemModel.image);
+        Glide.with(context)
+                .asBitmap()
+                .load(itemModel.url)
+                .into(holder.cardBinding.imageView);
        holder.cardBinding.title.setText(itemModel.label);
        holder.cardBinding.title.setBackgroundColor(itemModel.color);
 

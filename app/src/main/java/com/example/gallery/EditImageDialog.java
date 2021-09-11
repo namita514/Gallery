@@ -30,6 +30,7 @@ public class EditImageDialog {
     private Bitmap  bitmap;
     DialogEditImageBinding b;
     private boolean isCustomLabel;
+    private String url1;
 
     EditImageDialog show(Context context, Bitmap bitmap, EditImageDialog.OnCompleteListener listener){
         this.context=context;
@@ -59,8 +60,9 @@ public class EditImageDialog {
         dialog.hide();
         new ItemHelper().editImage(bitmap, context, new ItemHelper.OnCompleteListener() {
             @Override
-            public void onFetched(Bitmap image, Set<Integer> colors, List<String> label) {
+            public void onFetched(Bitmap image,String url, Set<Integer> colors, List<String> label) {
                 dialog.show();
+                url1=url;
                 showData(bitmap,colors,label);
             }
 
@@ -106,7 +108,7 @@ public class EditImageDialog {
                 int color=((Chip)b.colorChips.findViewById(colorChipId)).getChipBackgroundColor().getDefaultColor();
 
                 //send callbacks
-                listener.onImageAdded(new ItemModel(bitmap,color,label));
+                listener.onImageAdded(new ItemModel(bitmap,url1,color,label));
                 dialog.dismiss();
             }
         });
