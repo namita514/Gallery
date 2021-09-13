@@ -52,9 +52,8 @@ private List<ItemModel> cardItem=new ArrayList<>();
         b = ActivityGalleryBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
         preferences=getSharedPreferences("shared preferences",MODE_PRIVATE);
-        if(cardItem==null) {
-            b.zeroItem.setVisibility(View.VISIBLE);
-        }
+
+
 
       loadSharedPreferences();
 
@@ -258,7 +257,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
               @Override
               public void onImageAdded(ItemModel item) {
                   cardItem.add(item) ;
-                  b.zeroItem.setVisibility(View.GONE);
+
                   setUpRecyclerView();
 //                  b.zeroItem.setVisibility(View.GONE);
 
@@ -279,7 +278,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
         new AddImageDialog().show(this, new AddImageDialog.OnCompleteListener() {
             @Override
             public void onImageAdded(ItemModel item) {
-               b.zeroItem.setVisibility(View.GONE);
+
                cardItem.add(item) ;
                 setUpRecyclerView();
             }
@@ -329,7 +328,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
         if(cardItem==null){
             cardItem=new ArrayList<>();
         }
-        b.zeroItem.setVisibility(View.GONE);
+
         setUpRecyclerView();
 
 
