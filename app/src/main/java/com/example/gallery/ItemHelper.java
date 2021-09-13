@@ -136,10 +136,10 @@ listener.onError(e.toString());     }
     }
 
     // to get the color and label option for editable image
-    public void editImage(Bitmap bitmap ,Context context,OnCompleteListener listener){
-        this.bitmap=bitmap;
+    public void editImage(String url ,Context context, OnCompleteListener listener){
+        fetchImage(url);
         this.context=context;
         this.listener=listener;
-        extractPaletteColorFromBitmap(bitmap);
+
     }
 }

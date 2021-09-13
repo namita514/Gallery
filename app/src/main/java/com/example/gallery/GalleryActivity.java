@@ -43,6 +43,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
     ItemTouchHelper.Callback callback2;
     ItemTouchHelper itemTouchHelper1;
     private Bitmap bitmap;
+    private String url1;
 
 
     @Override
@@ -166,10 +167,10 @@ private List<ItemModel> cardItem=new ArrayList<>();
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
             case R.id.edit_picture:
-                bitmap=adapter.images;
+                url1=adapter.url;
                 int index=adapter.index;
-                  editImage(bitmap,index);
-                Toast.makeText(GalleryActivity.this,"edit picture",Toast.LENGTH_SHORT).show();
+                  editImage(url1,index);
+
                 return true;
             case R.id.share_image:
                 shareImage();
@@ -180,9 +181,9 @@ private List<ItemModel> cardItem=new ArrayList<>();
 
     }
 //to edit the image--------------------
-    private void editImage(Bitmap bitmap,int index) {
+    private void editImage(String url,int index) {
 
-        new EditImageDialog().show(this, bitmap, new EditImageDialog.OnCompleteListener() {
+        new EditImageDialog().show(this,url, new EditImageDialog.OnCompleteListener() {
             @Override
             public void onImageAdded(ItemModel item) {
               cardItem.set(index,item);

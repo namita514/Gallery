@@ -34,7 +34,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> im
     public  ItemTouchHelper mItemTouchHelper;
     public int mode;
     public int index;
-    public Bitmap images;
+    public String url;
    public ItemCardBinding binding;
    public List<ViewHolder> holders=new ArrayList<>();
 
@@ -171,7 +171,7 @@ return true;
             menu.add(this.getAdapterPosition(),R.id.share_image,1,"Share image");
             index=this.getAdapterPosition();
             binding=cardBinding;
-            images=items.get(this.getAdapterPosition()).image;
+            url=items.get(this.getAdapterPosition()).url;
 
         }
 
