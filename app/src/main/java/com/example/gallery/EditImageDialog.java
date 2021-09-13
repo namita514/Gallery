@@ -30,11 +30,12 @@ public class EditImageDialog {
     private Bitmap  bitmap;
     DialogEditImageBinding b;
     private boolean isCustomLabel;
+    private String url;
 
-    EditImageDialog show(Context context, Bitmap bitmap, EditImageDialog.OnCompleteListener listener){
+    EditImageDialog show(Context context, String url, EditImageDialog.OnCompleteListener listener){
         this.context=context;
         this.listener = listener;
-        this.bitmap=bitmap;
+        this.url=url;
 
         //inflate dialogs layout
         if(context instanceof GalleryActivity){
@@ -57,11 +58,12 @@ public class EditImageDialog {
 
     public void editItem(){
         dialog.hide();
-        new ItemHelper().editImage(bitmap, context, new ItemHelper.OnCompleteListener() {
+        new ItemHelper().editImage(url, context, new ItemHelper.OnCompleteListener() {
             @Override
-            public void onFetched(Bitmap image, Set<Integer> colors, List<String> label) {
+            public void onFetched(Bitmap image,String url, Set<Integer> colors, List<String> label) {
                 dialog.show();
-                showData(bitmap,colors,label);
+
+                showData(image,colors,label);
             }
 
             @Override
@@ -106,7 +108,7 @@ public class EditImageDialog {
                 int color=((Chip)b.colorChips.findViewById(colorChipId)).getChipBackgroundColor().getDefaultColor();
 
                 //send callbacks
-                listener.onImageAdded(new ItemModel(bitmap,color,label));
+                listener.onImageAdded(new ItemModel(bitmap,url,color,label));
                 dialog.dismiss();
             }
         });

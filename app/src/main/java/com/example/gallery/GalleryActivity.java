@@ -21,7 +21,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.gallery.adapters.ItemAdapter;
-import com.example.gallery.databinding.ActivityMainBinding;
+import com.example.gallery.databinding.ActivityGalleryBinding;
 import com.example.gallery.helpers.SimpleItemTouchHelperCallback;
 import com.example.gallery.models.ItemModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryActivity extends AppCompatActivity {
-ActivityMainBinding b;
+ActivityGalleryBinding b;
 private List<ItemModel> cardItem=new ArrayList<>();
     SharedPreferences preferences;
     ItemAdapter adapter;
@@ -43,23 +43,23 @@ private List<ItemModel> cardItem=new ArrayList<>();
     ItemTouchHelper.Callback callback2;
     ItemTouchHelper itemTouchHelper1;
     private Bitmap bitmap;
+    private String url1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setting up view binding
-        b = ActivityMainBinding.inflate(getLayoutInflater());
+        b = ActivityGalleryBinding.inflate(getLayoutInflater());
         setContentView(b.getRoot());
         preferences=getSharedPreferences("shared preferences",MODE_PRIVATE);
-//        loadSharedPreferences();
+
+
+
+      loadSharedPreferences();
+
 
     }
-
-
-
-
-    //
     //binding adapter to recycler view
     private void setUpRecyclerView() {
          adapter=new ItemAdapter(this,cardItem);
@@ -73,6 +73,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
         itemTouchHelper1.attachToRecyclerView(b.cardItem);
         restoreEnableDragAndDrop();
         b.cardItem.setAdapter(adapter);
+
     }
 
     // to create option menu
@@ -166,10 +167,10 @@ private List<ItemModel> cardItem=new ArrayList<>();
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
             case R.id.edit_picture:
-                bitmap=adapter.images;
+                url1=adapter.url;
                 int index=adapter.index;
-                  editImage(bitmap,index);
-                Toast.makeText(GalleryActivity.this,"edit picture",Toast.LENGTH_SHORT).show();
+                  editImage(url1,index);
+
                 return true;
             case R.id.share_image:
                 shareImage();
@@ -180,9 +181,9 @@ private List<ItemModel> cardItem=new ArrayList<>();
 
     }
 //to edit the image--------------------
-    private void editImage(Bitmap bitmap,int index) {
+    private void editImage(String url,int index) {
 
-        new EditImageDialog().show(this, bitmap, new EditImageDialog.OnCompleteListener() {
+        new EditImageDialog().show(this,url, new EditImageDialog.OnCompleteListener() {
             @Override
             public void onImageAdded(ItemModel item) {
               cardItem.set(index,item);
@@ -257,7 +258,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
               @Override
               public void onImageAdded(ItemModel item) {
                   cardItem.add(item) ;
-                  b.zeroItem.setVisibility(View.GONE);
+
                   setUpRecyclerView();
 //                  b.zeroItem.setVisibility(View.GONE);
 
@@ -278,7 +279,7 @@ private List<ItemModel> cardItem=new ArrayList<>();
         new AddImageDialog().show(this, new AddImageDialog.OnCompleteListener() {
             @Override
             public void onImageAdded(ItemModel item) {
-               b.zeroItem.setVisibility(View.GONE);
+
                cardItem.add(item) ;
                 setUpRecyclerView();
             }
@@ -324,9 +325,11 @@ private List<ItemModel> cardItem=new ArrayList<>();
         Type type=new TypeToken<ArrayList<ItemModel>>(){
         }.getType();
         cardItem=gson.fromJson(json,type);
+
         if(cardItem==null){
             cardItem=new ArrayList<>();
         }
+
         setUpRecyclerView();
 
 

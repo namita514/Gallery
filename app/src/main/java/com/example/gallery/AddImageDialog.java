@@ -21,6 +21,7 @@ import com.example.gallery.models.ItemModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +34,7 @@ public class AddImageDialog {
     private Bitmap image;
    private AlertDialog dialog;
    private ItemModel item;
+   private String Url;
 
     AddImageDialog show(Context context, OnCompleteListener listener){
         this.context=context;
@@ -140,8 +142,9 @@ public class AddImageDialog {
     private void fetchRandomImage(int width, int height) {
    new ItemHelper().fetchData(width, height, context, new ItemHelper.OnCompleteListener() {
        @Override
-       public void onFetched(Bitmap image, Set<Integer> colors, List<String> label)
+       public void onFetched(Bitmap image,String url, Set<Integer> colors, List<String> label)
        {b.progressIndicatorRoot.setVisibility(View.GONE);
+       Url=url;
        showData(image ,colors,label);
 
 
@@ -160,8 +163,9 @@ public class AddImageDialog {
     private void fetchRandomImage(int x) {
         new ItemHelper().fetchData(x, context, new ItemHelper.OnCompleteListener() {
             @Override
-            public void onFetched(Bitmap image, Set<Integer> colors, List<String> label) {
+            public void onFetched(Bitmap image,String url, Set<Integer> colors, List<String> label) {
                 b.progressIndicatorRoot.setVisibility(View.GONE);
+                Url=url;
                 showData(image ,colors,label);
             }
 
@@ -179,10 +183,10 @@ public class AddImageDialog {
         dialog.hide();
         new ItemHelper().fetchImageFromGallery(url, context, new ItemHelper.OnCompleteListener() {
             @Override
-            public void onFetched(Bitmap image, Set<Integer> colors, List<String> label) {
+            public void onFetched(Bitmap image,String url, Set<Integer> colors, List<String> label) {
                 b.inputDimensionsRoot.setVisibility(View.GONE);
                 dialog.show();
-
+                    Url=url;
                 b.mainRoot.setVisibility(View.VISIBLE);
                 showData(image,colors,label);
             }
@@ -234,7 +238,7 @@ public class AddImageDialog {
                 int color=((Chip)b.colorChips.findViewById(colorChipId)).getChipBackgroundColor().getDefaultColor();
 
                 //send callbacks
-                listener.onImageAdded(new ItemModel(image,color,label));
+                listener.onImageAdded(new ItemModel(image,Url,color,label));
                 dialog.dismiss();
             }
         });
