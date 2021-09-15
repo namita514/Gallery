@@ -56,7 +56,19 @@ public class ItemHelper {
         this.context = context;
 
         this.listener = listener;
-        fetchImage(url);
+        url1=url;
+        Glide.with(context).asBitmap().load(url1).into(new CustomTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull  Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                extractPaletteColorFromBitmap(resource);
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable  Drawable placeholder) {
+
+            }
+        });
+
     }
 
     //imageFetcher--------------------------------------------------------------
@@ -65,7 +77,7 @@ public class ItemHelper {
              @Override
              public void onFetched(String redirectedUrl) {
                  url1=redirectedUrl;
-                 Glide.with(context).asBitmap().load(url1).diskCacheStrategy(DiskCacheStrategy.NONE).into(new CustomTarget<Bitmap>() {
+                 Glide.with(context).asBitmap().load(url1).into(new CustomTarget<Bitmap>() {
                      @Override
                      public void onResourceReady(@NonNull  Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                          extractPaletteColorFromBitmap(resource);
